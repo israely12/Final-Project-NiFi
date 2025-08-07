@@ -27,9 +27,11 @@ def create_process_group(nifi_client):
     response = requests.post(url, headers=headers, json=data, verify=False)
 
     if response.status_code == 201:
-        pg = response.json()
+        processGroup = response.json()
         print("Process Group created successfully")
-        print("Process Group ID:", pg["id"])
+        print("Process Group ID:", processGroup["id"])
+        return processGroup
     else:
         print("Failed to create Process Group:", response.status_code)
         print(response.text)
+        return {"error": response.text}

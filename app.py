@@ -2,12 +2,14 @@ from src.nifi_modules.connect_to_nifi import NiFiClient
 from src.nifi_modules.create_funnel import create_funnel
 from src.nifi_modules.create_process_group import create_process_group
 from src.nifi_modules.get_process_group_by_id import get_process_group_by_id
+from src.rest_api.run_flask import create_app
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-def main():
+MODE = os.getenv("RUN_MODE")
+def run_modules():
     client = NiFiClient(
         base_url=os.getenv("NIFI_BASE_URL"),
         username=os.getenv("MY_NIFI_USERNAME"),
@@ -18,5 +20,14 @@ def main():
     create_process_group(client)
     get_process_group_by_id(client)
 
+def run_api():
+    app = create_app()
+    app.run(debug=True)
+
 if __name__ == "__main__":
-    main()
+    if MODE == "modules":
+        run_modules()
+    elif MODE == "api":
+        run_api()
+    else:
+        print("error")
