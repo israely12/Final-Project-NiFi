@@ -27,6 +27,8 @@ def create_funnel(nifi_client):
         funnel = response.json()
         print("Funnel created successfully")
         print("Funnel ID:", funnel["id"])
+        return funnel
     else:
         print("Failed to create funnel:", response.status_code)
         print(response.text)
+        return {"error": response.text}
