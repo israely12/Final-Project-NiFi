@@ -4,6 +4,7 @@ from src.nifi_modules.create_process_group import create_process_group
 from src.nifi_modules.get_process_group_by_id import get_process_group_by_id
 from src.nifi_modules.update_process_group_name import update_process_group_name
 from src.nifi_modules.create_input_port import create_input_port
+from src.nifi_modules.create_output_port import create_output_port
 from src.rest_api.run_flask import create_app
 import os
 from dotenv import load_dotenv
@@ -25,6 +26,7 @@ def run_modules():
     get_process_group_by_id(client)
     update_process_group_name(client,new_process_group_name)
     create_input_port(client)
+    create_output_port(client)
 
 def run_api():
     app = create_app()
