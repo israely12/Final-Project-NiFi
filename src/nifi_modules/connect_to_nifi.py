@@ -12,9 +12,9 @@ class NiFiClient:
 
     def connect_and_print_about(self):
         if self.get_token():
+            print("Connected to NiFi!")
             about = self.get_about()
             if about:
-                print("Connected to NiFi!")
                 print(about)
             else:
                 print("Failed to retrieve NiFi info.")

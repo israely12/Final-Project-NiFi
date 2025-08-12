@@ -6,27 +6,24 @@ from src.nifi_modules.update_process_group_name import update_process_group_name
 from src.nifi_modules.create_input_port import create_input_port
 from src.nifi_modules.create_output_port import create_output_port
 from src.rest_api.run_flask import create_app
-import os
-from dotenv import load_dotenv
+from configuration import NIFI_BASE_URL, MY_NIFI_USERNAME, MY_NIFI_PASSWORD, RUN_MODE, UPDATE_PROCESS_GROUP
 
-load_dotenv()
-
-MODE = os.getenv("RUN_MODE")
-
-new_process_group_name = os.getenv("UPDATE_PROCESS_GROUP")
+MODE = RUN_MODE
+new_process_group_name = UPDATE_PROCESS_GROUP
 def run_modules():
     client = NiFiClient(
-        base_url=os.getenv("NIFI_BASE_URL"),
-        username=os.getenv("MY_NIFI_USERNAME"),
-        password=os.getenv("MY_NIFI_PASSWORD")
+        base_url=NIFI_BASE_URL,
+        username=MY_NIFI_USERNAME,
+        password=MY_NIFI_PASSWORD
     )
+
     client.connect_and_print_about()
-    create_funnel(client)
-    create_process_group(client)
-    get_process_group_by_id(client)
-    update_process_group_name(client,new_process_group_name)
-    create_input_port(client)
-    create_output_port(client)
+    # create_funnel(client)
+    # create_process_group(client)
+    # get_process_group_by_id(client)
+    # update_process_group_name(client,new_process_group_name)
+    # create_input_port(client)
+    # create_output_port(client)
 
 def run_api():
     app = create_app()
