@@ -1,14 +1,13 @@
 import requests
 from typing import Dict, Any
 from src.utils import build_request, creation_succeeded
-from configuration import PROCESS_GROUP_ID
 
-def create_input_port(nifi_client) -> Dict[str, Any]:
+def create_input_port(nifi_client, process_group_id: str) -> Dict[str, Any]:
     component_payload = {
         "name": "Ulik InputPort"
     }
 
-    url, headers, data = build_request(nifi_client, PROCESS_GROUP_ID, "input-ports", component_payload)
+    url, headers, data = build_request(nifi_client, process_group_id, "input-ports", component_payload)
 
     response = requests.post(url, headers=headers, json=data, verify=False)
 
