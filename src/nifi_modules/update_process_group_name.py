@@ -1,10 +1,8 @@
 import requests
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-def update_process_group_name(nifi_client, new_name):
-    processGroupID = os.getenv("PROCESS_GROUP_ID")
+from typing import Dict, Any
+from configuration import PROCESS_GROUP_ID
+def update_process_group_name(nifi_client, new_name) -> Dict[str, Any]:
+    processGroupID = PROCESS_GROUP_ID
 
     get_url = f"{nifi_client.base_url}/process-groups/{processGroupID}"
     headers = {

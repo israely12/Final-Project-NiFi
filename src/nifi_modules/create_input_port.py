@@ -1,28 +1,18 @@
 import requests
-import os
-from dotenv import load_dotenv
+from typing import Dict, Any
+from src.utils import build_request, creation_succeeded
+from configuration import PROCESS_GROUP_ID
 
-load_dotenv()
-def create_input_port(nifi_client):
-    process_group_id = os.getenv("PROCESS_GROUP_ID")
-    x, y = 100.0, 200.0
+def create_input_port(nifi_client) -> Dict[str, Any]:
+    component_payload = {
+        "name": "Ulik InputPort"
+    }
 
-    url = f"{nifi_client.base_url}/process-groups/{process_group_id}/input-ports"
-    headers = {
-        "Authorization": f"Bearer {nifi_client.token}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "revision": {"version": 0},
-        "component": {
-            "name": "Ulik InputPort",
-            "position": {"x": x, "y": y}
-        }
-    }
+    url, headers, data = build_request(nifi_client, PROCESS_GROUP_ID, "input-ports", component_payload)
 
     response = requests.post(url, headers=headers, json=data, verify=False)
 
-    if response.status_code == 201:
+    if creation_succeeded(response):
         port = response.json()
         print("InputPort created successfully")
         print("InputPort ID:", port["id"])

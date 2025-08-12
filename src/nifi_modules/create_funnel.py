@@ -1,29 +1,16 @@
 import requests
-import urllib3
-import os
+from configuration import PROCESS_GROUP_CANVAS_ID
 from dotenv import load_dotenv
+from src.utils import creation_succeeded, build_request
+from typing import Dict, Any
+from src.nifi_modules.connect_to_nifi import NiFiClient
 
 load_dotenv()
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-def create_funnel(nifi_client):
-    ProcessGroupCanvasID = os.getenv("PROCESS_GROUP_CANVAS_ID")
-    x, y = 400.0, 100.0
-
-    url = f"{nifi_client.base_url}/process-groups/{ProcessGroupCanvasID}/funnels"
-    headers = {
-        "Authorization": f"Bearer {nifi_client.token}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "revision": {"version": 0},
-        "component": {"position": {"x": x, "y": y}}
-    }
-
+def create_funnel(nifi_client:NiFiClient) -> Dict[str, Any]:
+    url, headers, data = build_request(nifi_client, PROCESS_GROUP_CANVAS_ID, "funnels", {})
     response = requests.post(url, headers=headers, json=data, verify=False)
 
-    if response.status_code == 201:
+    if creation_succeeded(response):
         funnel = response.json()
         print("Funnel created successfully")
         print("Funnel ID:", funnel["id"])

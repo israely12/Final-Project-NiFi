@@ -1,32 +1,17 @@
 import requests
-import urllib3
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-def create_process_group(nifi_client):
-    processGroupCanvasID = os.getenv("PROCESS_GROUP_CANVAS_ID")
-    x, y = 200.0, 300.0
-    name = os.getenv("PROCESS_GROUP_NAME")
-
-    url = f"{nifi_client.base_url}/process-groups/{processGroupCanvasID}/process-groups"
-    headers = {
-        "Authorization": f"Bearer {nifi_client.token}",
-        "Content-Type": "application/json"
+from typing import Dict, Any
+from src.utils import build_request, creation_succeeded
+from configuration import PROCESS_GROUP_CANVAS_ID, PROCESS_GROUP_NAME
+def create_process_group(nifi_client) -> Dict[str, Any]:
+    component_payload = {
+        "name": PROCESS_GROUP_NAME
     }
-    data = {
-        "revision": {"version": 0},
-        "component": {
-            "name": name,
-            "position": {"x": x, "y": y}
-        }
-    }
+
+    url, headers, data = build_request(nifi_client, PROCESS_GROUP_CANVAS_ID, "process-groups", component_payload)
 
     response = requests.post(url, headers=headers, json=data, verify=False)
 
-    if response.status_code == 201:
+    if creation_succeeded(response):
         processGroup = response.json()
         print("Process Group created successfully")
         print("Process Group ID:", processGroup["id"])
