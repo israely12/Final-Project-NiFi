@@ -7,8 +7,10 @@ from src.nifi_modules.create_input_port import create_input_port
 from src.nifi_modules.create_output_port import create_output_port
 from src.nifi_modules.create_full_process_group_setup import create_full_process_group_setup
 from src.nifi_modules.create_connection import create_connection
+from src.nifi_modules.create_parameter_context import create_parameter_context
 from src.rest_api.run_flask import create_app
 from configuration import NIFI_BASE_URL, MY_NIFI_USERNAME, MY_NIFI_PASSWORD, RUN_MODE, UPDATE_PROCESS_GROUP, PROCESS_GROUP_ID, DEST_PG_ID, DEST_PORT_ID, SOURCE_PORT_ID, SOURCE_PG_ID, PROCESS_GROUP_CANVAS_ID
+from src.utils import parameters
 
 MODE = RUN_MODE
 new_process_group_name = UPDATE_PROCESS_GROUP
@@ -29,7 +31,12 @@ def run_modules():
     # create_output_port(client, process_group_id)
     # create_full_process_group_setup(client)
     create_connection(client, PROCESS_GROUP_CANVAS_ID, SOURCE_PORT_ID, SOURCE_PG_ID, DEST_PORT_ID, DEST_PG_ID)
-
+    create_parameter_context(
+        client,
+        name="UlikParamContext",
+        description="Parameters for test",
+        parameters=parameters
+    )
 def run_api():
     app = create_app()
     app.run(debug=True)

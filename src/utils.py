@@ -1,6 +1,10 @@
 import requests
 from typing import Tuple, Dict, Any, Optional
 
+parameters = [
+    {"name": "Ulik", "value": "the best", "sensitive": True},
+    {"name": "I Am", "value": "The Goat", "sensitive": True}
+]
 def creation_succeeded(response: requests.Response) -> bool:
     return response.status_code in (200, 201)
 
